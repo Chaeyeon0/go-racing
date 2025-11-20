@@ -1,6 +1,9 @@
 package racing
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type Car struct {
 	Name     string
@@ -21,5 +24,5 @@ func (c *Car) Move(strategy MovementStrategy) {
 }
 
 func (c Car) Status() string {
-	return fmt.Sprintf("%s : %s", c.Name, string(make([]rune, c.Distance, c.Distance)))
+	return fmt.Sprintf("%s : %s", c.Name, strings.Repeat(">", c.Distance))
 }
