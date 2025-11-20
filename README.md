@@ -40,28 +40,28 @@ go-racing/
 
 ### 1️⃣ 자동차 기본 동작 (`car.go`)
 
-- [ ]  자동차는 이름(name)과 이동 거리(distance)를 가진다.
-- [ ]  이름은 5자 이하만 허용하며 초과 시 `error` 발생
-- [ ]  0~9 사이 랜덤 값 중 **4 이상이면 전진**, 아니면 정지
-- [ ]  전진 여부를 `MovementStrategy` 인터페이스로 분리
-- [ ]  자동차 상태 문자열 반환(`String()` or `Status()`)
+- [x]  자동차는 이름(name)과 이동 거리(distance)를 가진다.
+- [x]  이름은 5자 이하만 허용하며 초과 시 `error` 발생
+- [x]  0~9 사이 랜덤 값 중 **4 이상이면 전진**, 아니면 정지
+- [x]  전진 여부를 `MovementStrategy` 인터페이스로 분리
+- [x]  자동차 상태 문자열 반환(`String()` or `Status()`)
 
 ---
 
 ### 2️⃣ 자동차 그룹 관리 (`cars.go`)
 
-- [ ]  여러 자동차(`[]Car`)를 관리하는 `Cars` 구조체 정의
-- [ ]  모든 자동차 전진 (`MoveAll(strategy)`) 기능
-- [ ]  각 자동차의 이름과 이동 거리 상태 출력
-- [ ]  최대 거리 기준 **우승자 판별 (복수 가능)**
+- [x]  여러 자동차(`[]Car`)를 관리하는 `Cars` 구조체 정의
+- [x]  모든 자동차 전진 (`MoveAll(strategy)`) 기능
+- [x]  각 자동차의 이름과 이동 거리 상태 출력
+- [x]  최대 거리 기준 **우승자 판별 (복수 가능)**
 
 ---
 
 ### 3️⃣ 이동 전략 (`strategy.go`)
 
-- [ ]  `MovementStrategy` 인터페이스 정의 (`Movable() bool`)
-- [ ]  `RandomMovementStrategy` 구현 (랜덤 값 ≥ 4 → 전진)
-- [ ]  테스트용 전략 (`AlwaysMoveStrategy`, `NeverMoveStrategy`) 추가
+- [x]  `MovementStrategy` 인터페이스 정의 (`Movable() bool`)
+- [x]  `RandomMovementStrategy` 구현 (랜덤 값 ≥ 4 → 전진)
+- [x]  테스트용 전략 (`AlwaysMoveStrategy`, `NeverMoveStrategy`) 추가
 
 ---
 
@@ -69,23 +69,23 @@ go-racing/
 
 ### InputView
 
-- [ ]  자동차 이름 입력 (`쉼표(,)`로 구분)
-- [ ]  시도 횟수 입력
+- [x]  자동차 이름 입력 (`쉼표(,)`로 구분)
+- [x]  시도 횟수 입력
 - [ ]  잘못된 입력(이름 초과, 음수, 비숫자) → `error`
 
 ### OutputView
 
-- [ ]  각 라운드별 결과 출력
-- [ ]  최종 우승자 출력
+- [x]  각 라운드별 결과 출력
+- [x]  최종 우승자 출력
 - [ ]  `tview`로 시각화 (색상, 순위 표시)
 
 ---
 
 ### 5️⃣ 게임 컨트롤러 (`controller.go`)
 
-- [ ]  전체 흐름 제어 (입력 → 실행 → 출력)
-- [ ]  라운드별 전진 및 상태 출력
-- [ ]  모든 시도 후 우승자 계산 및 출력
+- [x]  전체 흐름 제어 (입력 → 실행 → 출력)
+- [x]  라운드별 전진 및 상태 출력
+- [x]  모든 시도 후 우승자 계산 및 출력
 
 ---
 
@@ -101,18 +101,18 @@ go-racing/
 
 ### 7️⃣ 애플리케이션 진입점 (`main.go`)
 
-- [ ]  프로그램 실행 및 예외 처리
-- [ ]  `GameController` 초기화
+- [x]  프로그램 실행 및 예외 처리
+- [x]  `GameController` 초기화
 - [ ]  `tview` 기반 실시간 UI 표시
-- [ ]  완주 후 순위 출력
+- [x]  완주 후 순위 출력
 
 ---
 
 ### 8️⃣ 테스트 (`_test.go`)
 
-- [ ]  `Car` 이름 검증
-- [ ]  이동 조건 테스트 (랜덤 / AlwaysMove)
-- [ ]  `Cars` 우승자 계산
+- [x]  `Car` 이름 검증
+- [x]  이동 조건 테스트 (랜덤 / AlwaysMove)
+- [x]  `Cars` 우승자 계산
 - [ ]  `Race` 동시성 테스트
 - [ ]  대규모 레이스 성능 테스트
 
