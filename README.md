@@ -8,17 +8,19 @@
 ## 🗂️ 패키지 구조
 
 ```bash
-gocar/
-├── go.mod                 # Go 모듈 설정
-├── main.go                # 진입점 (Application)
-├── controller.go          # 게임 컨트롤러
-├── car.go                 # 자동차(Car) 클래스
-├── cars.go                # 자동차 그룹(Cars) 관리
-├── strategy.go            # 이동 전략(MovementStrategy)
-├── race.go                # 병렬 경주 (Goroutine)
-├── input.go               # 사용자 입력 (InputView)
-├── output.go              # 결과 출력 (OutputView)
-└── *_test.go              # 단위 테스트 파일
+go-racing/
+├── go.mod
+├── cmd/
+│   └── main.go
+├── racing/
+│   ├── car.go
+│   ├── cars.go
+│   ├── strategy.go
+│   └── game_controller.go
+├── test/
+│   ├── car_test.go
+│   └── cars_test.go
+└── README.md
 ```
 
 | 파일명 | 역할 |
