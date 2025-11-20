@@ -1,4 +1,4 @@
-package goracing
+package racing
 
 import "fmt"
 
