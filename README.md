@@ -8,32 +8,39 @@
 ## 🗂️ 패키지 구조
 
 ```bash
-go-racing/
-├── go.mod
+goracing/
 ├── cmd/
-│   └── main.go
-├── racing/
-│   ├── car.go
-│   ├── cars.go
-│   ├── strategy.go
-│   └── game_controller.go
-├── test/
-│   ├── car_test.go
-│   └── cars_test.go
-└── README.md
+│   └── main.go                     # CLI / TUI 실행 진입점 (--mode 옵션)
+├── cli/
+│   ├── game.go                     # CLI 게임 컨트롤러 (입력 → 실행 → 출력)
+│   ├── input.go                    # 사용자 입력 처리
+│   └── output.go                   # 결과 출력 (라운드별 / 최종)
+├── tui/
+│   ├── ui.go                       # tview UI (화면 표시 및 업데이트)
+│   └── race.go                     # 고루틴 기반 병렬 경주 로직 (채널 기반)
+├── domain/
+│   ├── car.go                      # 자동차 이름, 이동 거리, 전진 로직
+│   ├── cars.go                     # 전체 자동차 관리 및 우승자 계산
+│   └── strategy.go                 # 이동 조건 전략(랜덤, AlwaysMove, NeverMove)
+├── go.mod                          # Go 모듈 설정
+└── README.md                       # 프로젝트 개요 및 개발 문서
+
 ```
 
-| 파일명 | 역할 |
-| --- | --- |
-| `car.go` | 자동차 이름, 이동 거리, 전진 로직 |
-| `cars.go` | 전체 자동차 관리 및 우승자 계산 |
-| `strategy.go` | 이동 조건 전략(랜덤, 수동 등) |
-| `race.go` | 고루틴 기반 병렬 경주 실행 |
-| `controller.go` | 프로그램 전체 흐름 제어 |
-| `input.go` | 사용자 입력 처리 |
-| `output.go` | 각 라운드별 결과 및 최종 우승자 출력 |
-| `main.go` | 진입점 (Application) |
+## 🧩 **파일별 역할 요약**
 
+| 파일명 | 패키지 | 주요 역할 |
+| --- | --- | --- |
+| `car.go` | `domain` | 자동차 이름, 이동 거리, 전진 로직 구현 |
+| `cars.go` | `domain` | 자동차 리스트 관리, 우승자 판별 |
+| `strategy.go` | `domain` | 이동 조건 전략 인터페이스 및 구현체 정의 |
+| `game.go` | `cli` | CLI 기반 전체 게임 로직 제어 (입력 → 시도 → 결과) |
+| `input.go` | `cli` | 사용자 입력 처리 (자동차 이름, 시도 횟수 등) |
+| `output.go` | `cli` | 각 라운드별 상태 및 최종 우승자 출력 |
+| `race.go` | `tui` | 고루틴 병렬 경주 및 실시간 상태 전송 채널 관리 |
+| `ui.go` | `tui` | tview 기반 실시간 UI 시각화 (자동차 이동, 순위 표시) |
+| `main.go` | `cmd` | CLI / TUI 실행 분기 (`--mode` 플래그) 및 진입점 |
+| `README.md` | root | 프로젝트 개요, 구조, 실행 방법, 개발 흐름 문서화 |
 ---
 
 ## ✅ 기능 요구 사항 체크리스트
