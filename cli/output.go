@@ -1,12 +1,13 @@
-package racing
+package cli
 
 import (
 	"fmt"
+	"goracing/domain"
 	"strings"
 )
 
-func PrintRoundResult(cars *Cars) {
-	for _, car := range cars.list {
+func PrintRoundResult(cars *domain.Cars) {
+	for _, car := range cars.List {
 		fmt.Println(car.Status())
 	}
 	fmt.Println()
