@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -15,6 +16,10 @@ func ReadCarNames() ([]string, error) {
 
 	names := strings.Split(input, ",")
 	for _, name := range names {
+		name = strings.TrimSpace(name)
+		if len(name) == 0 {
+			return nil, fmt.Errorf("빈 이름은 허용되지 않습니다.")
+		}
 		if len(name) > 5 {
 			return nil, fmt.Errorf("자동차 이름은 5자 이하만 가능합니다: %s", name)
 		}
@@ -28,10 +33,16 @@ func ReadAttemptCount() (int, error) {
 	input, _ := reader.ReadString('\n')
 	input = strings.TrimSpace(input)
 
-	var attempts int
-	_, err := fmt.Sscan(input, &attempts)
-	if err != nil || attempts <= 0 {
-		return 0, fmt.Errorf("유효한 숫자를 입력해주세요.")
+	if input == "" {
+		return 0, fmt.Errorf("시도 횟수를 입력해야 합니다.")
+	}
+
+	attempts, err := strconv.Atoi(input)
+	if err != nil {
+		return 0, fmt.Errorf("숫자만 입력해야 합니다.")
+	}
+	if attempts <= 0 {
+		return 0, fmt.Errorf("시도 횟수는 1 이상이어야 합니다.")
 	}
 	return attempts, nil
 }
