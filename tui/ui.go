@@ -3,6 +3,7 @@ package tui
 import (
 	"fmt"
 	"goracing/domain"
+	"strings"
 	"time"
 
 	"github.com/rivo/tview"
@@ -31,20 +32,30 @@ func (ui *RaceUI) Start() {
 
 	updateCh, resultCh := ui.Race.Start()
 
-	for update := range updateCh {
-		ui.TextView.Clear()
-		for _, car := range update {
-			bar := string(make([]rune, car.Distance))
-			fmt.Fprintf(ui.TextView, "[white]%-5s: [green]%s>\n", car.Name, bar)
+	go func() {
+		for update := range updateCh {
+			ui.App.QueueUpdateDraw(func() {
+				ui.TextView.Clear()
+				for _, car := range update {
+					bar := strings.Repeat(">", car.Distance)
+					fmt.Fprintf(ui.TextView, "[white]%-5s: [green]%s>\n", car.Name, bar)
+				}
+			})
 		}
-		time.Sleep(100 * time.Millisecond)
-	}
 
-	results := <-resultCh
-	fmt.Fprintf(ui.TextView, "\n🏁 [green::b]모든 차량 완주!\n\n")
-	for i, r := range results {
-		fmt.Fprintf(ui.TextView, "[white]%d위: 🚗 %s — %.2fs\n", i+1, r.Name, r.Finish.Seconds())
-	}
+		results := <-resultCh
+		ui.App.QueueUpdateDraw(func() {
+			fmt.Fprintf(ui.TextView, "\n🏁 [green::b]모든 차량 완주!\n\n")
+			for i, r := range results {
+				fmt.Fprintf(ui.TextView, "[white]%d위: 🚗 %s — %.2fs\n", i+1, r.Name, r.Finish.Seconds())
+			}
+		})
 
-	ui.App.Stop()
+		time.Sleep(3 * time.Second)
+		ui.App.Stop()
+	}()
+
+	if err := ui.App.SetRoot(ui.TextView, true).Run(); err != nil {
+		panic(err)
+	}
 }
