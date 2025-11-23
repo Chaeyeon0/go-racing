@@ -30,11 +30,17 @@ func NewRaceUI(app *tview.Application, cars []*domain.Car) *RaceUI {
 
 func (ui *RaceUI) Start() {
 	fmt.Fprintf(ui.TextView, "[yellow::b]🚗 고루틴 자동차 경주 시작!\n\n")
-
 	updateCh, resultCh := ui.Race.Start()
 
 	go func() {
+		lastUpdate := time.Now()
 		for update := range updateCh {
+
+			if time.Since(lastUpdate) < 100*time.Millisecond {
+				continue
+			}
+			lastUpdate = time.Now()
+
 			ui.App.QueueUpdateDraw(func() {
 				ui.TextView.Clear()
 
