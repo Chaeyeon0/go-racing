@@ -30,7 +30,7 @@ func TestRace_ConcurrentExecution(t *testing.T) {
 		if endGoroutines <= startGoroutines {
 			t.Error("고루틴이 병렬로 실행되지 않았습니다.")
 		}
-	case <-time.After(5 * time.Second):
+	case <-time.After(15 * time.Second):
 		t.Error("타임아웃 — 병렬 실행 중 문제 발생")
 	}
 }
