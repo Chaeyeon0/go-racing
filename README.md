@@ -9,119 +9,19 @@
 
 ```bash
 goracing/
-├── cmd/
-│   └── main.go                     # CLI / TUI 실행 진입점 (--mode 옵션)
-├── cli/
-│   ├── game.go                     # CLI 게임 컨트롤러 (입력 → 실행 → 출력)
-│   ├── input.go                    # 사용자 입력 처리
-│   └── output.go                   # 결과 출력 (라운드별 / 최종)
-├── tui/
-│   ├── ui.go                       # tview UI (화면 표시 및 업데이트)
-│   └── race.go                     # 고루틴 기반 병렬 경주 로직 (채널 기반)
-├── domain/
-│   ├── car.go                      # 자동차 이름, 이동 거리, 전진 로직
-│   ├── cars.go                     # 전체 자동차 관리 및 우승자 계산
-│   └── strategy.go                 # 이동 조건 전략(랜덤, AlwaysMove, NeverMove)
-├── go.mod                          # Go 모듈 설정
-└── README.md                       # 프로젝트 개요 및 개발 문서
-
-```
-
-## 🧩 **파일별 역할 요약**
-
-| 파일명 | 패키지 | 주요 역할 |
-| --- | --- | --- |
-| `car.go` | `domain` | 자동차 이름, 이동 거리, 전진 로직 구현 |
-| `cars.go` | `domain` | 자동차 리스트 관리, 우승자 판별 |
-| `strategy.go` | `domain` | 이동 조건 전략 인터페이스 및 구현체 정의 |
-| `game.go` | `cli` | CLI 기반 전체 게임 로직 제어 (입력 → 시도 → 결과) |
-| `input.go` | `cli` | 사용자 입력 처리 (자동차 이름, 시도 횟수 등) |
-| `output.go` | `cli` | 각 라운드별 상태 및 최종 우승자 출력 |
-| `race.go` | `tui` | 고루틴 병렬 경주 및 실시간 상태 전송 채널 관리 |
-| `ui.go` | `tui` | tview 기반 실시간 UI 시각화 (자동차 이동, 순위 표시) |
-| `main.go` | `cmd` | CLI / TUI 실행 분기 (`--mode` 플래그) 및 진입점 |
-| `README.md` | root | 프로젝트 개요, 구조, 실행 방법, 개발 흐름 문서화 |
----
-
-## ✅ 기능 요구 사항 체크리스트
-
-### 1️⃣ 자동차 기본 동작 (`car.go`)
-
-- [x]  자동차는 이름(name)과 이동 거리(distance)를 가진다.
-- [x]  이름은 5자 이하만 허용하며 초과 시 `error` 발생
-- [x]  0~9 사이 랜덤 값 중 **4 이상이면 전진**, 아니면 정지
-- [x]  전진 여부를 `MovementStrategy` 인터페이스로 분리
-- [x]  자동차 상태 문자열 반환(`String()` or `Status()`)
-
----
-
-### 2️⃣ 자동차 그룹 관리 (`cars.go`)
-
-- [x]  여러 자동차(`[]Car`)를 관리하는 `Cars` 구조체 정의
-- [x]  모든 자동차 전진 (`MoveAll(strategy)`) 기능
-- [x]  각 자동차의 이름과 이동 거리 상태 출력
-- [x]  최대 거리 기준 **우승자 판별 (복수 가능)**
-
----
-
-### 3️⃣ 이동 전략 (`strategy.go`)
-
-- [x]  `MovementStrategy` 인터페이스 정의 (`Movable() bool`)
-- [x]  `RandomMovementStrategy` 구현 (랜덤 값 ≥ 4 → 전진)
-- [x]  테스트용 전략 (`AlwaysMoveStrategy`, `NeverMoveStrategy`) 추가
-
----
-
-### 4️⃣ 입력 / 출력 (`input.go`, `output.go`)
-
-### InputView
-
-- [x]  자동차 이름 입력 (`쉼표(,)`로 구분)
-- [x]  시도 횟수 입력
-- [ ]  잘못된 입력(이름 초과, 음수, 비숫자) → `error`
-
-### OutputView
-
-- [x]  각 라운드별 결과 출력
-- [x]  최종 우승자 출력
-- [ ]  `tview`로 시각화 (색상, 순위 표시)
-
----
-
-### 5️⃣ 게임 컨트롤러 (`controller.go`)
-
-- [x]  전체 흐름 제어 (입력 → 실행 → 출력)
-- [x]  라운드별 전진 및 상태 출력
-- [x]  모든 시도 후 우승자 계산 및 출력
-
----
-
-### 6️⃣ 병렬 경주 (`race.go`)
-
-- [ ]  `Race` 구조체에서 자동차별 **고루틴 실행**
-- [ ]  각 자동차의 **완주 시간(time.Duration)** 기록
-- [ ]  완료 순서 정렬 후 **순위 계산**
-- [ ]  실시간 진행 상태 `update` 채널로 송신
-- [ ]  100~1000대 확장 성능 테스트
-
----
-
-### 7️⃣ 애플리케이션 진입점 (`main.go`)
-
-- [x]  프로그램 실행 및 예외 처리
-- [x]  `GameController` 초기화
-- [ ]  `tview` 기반 실시간 UI 표시
-- [x]  완주 후 순위 출력
-
----
-
-### 8️⃣ 테스트 (`_test.go`)
-
-- [x]  `Car` 이름 검증
-- [x]  이동 조건 테스트 (랜덤 / AlwaysMove)
-- [x]  `Cars` 우승자 계산
-- [ ]  `Race` 동시성 테스트
-- [ ]  대규모 레이스 성능 테스트
+├── go.mod
+├── main.go                  # 프로그램 진입점 (CLI / TUI 모드 선택)
+├── cli/                     # CLI 모드 관련
+│   ├── startgame.go         # 게임 컨트롤러 (입력 → 실행 → 출력)
+│   ├── input.go             # 사용자 입력 처리 (자동차 이름, 시도 횟수)
+│   └── output.go            # 라운드별 출력, 최종 우승자 출력
+├── domain/                  # 도메인 모델
+│   ├── car.go               # 자동차 구조체 및 상태 출력
+│   ├── cars.go              # 자동차 그룹 관리, MoveAll, Winners
+│   └── strategy.go          # 이동 전략 인터페이스 및 구현 (Random, AlwaysMove, NeverMove)
+├── tui/                     # TUI (실시간 UI) 관련
+│   ├── race.go              # 병렬 레이스 구현 (고루틴, 채널)
+│   └── race_ui.go         서 레이스 성능 테스트
 
 ---
 
