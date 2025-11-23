@@ -47,3 +47,11 @@ func (c *Cars) Winners() []string {
 	}
 	return winners
 }
+
+func (c *Cars) StatusList() []string {
+	statuses := make([]string, len(c.List))
+	for i, car := range c.List {
+		statuses[i] = car.Status()
+	}
+	return statuses
+}
