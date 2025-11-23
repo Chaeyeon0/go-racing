@@ -9,7 +9,7 @@ import (
 )
 
 func BenchmarkRacePerformance(b *testing.B) {
-	testCases := []int{10, 100, 1000}
+	testCases := []int{10, 100, 1000, 10000}
 
 	for _, carCount := range testCases {
 		b.Run(

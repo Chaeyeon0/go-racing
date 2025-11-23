@@ -17,7 +17,7 @@ func NewRandomMovementStrategy(seed int64) RandomMovementStrategy {
 }
 
 func (r RandomMovementStrategy) Movable() bool {
-	return rand.Intn(10) >= 4
+	return r.r.Intn(10) >= 4
 }
 
 // 테스트용 전략
