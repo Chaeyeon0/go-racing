@@ -28,6 +28,7 @@ func (r *Race) Start() (<-chan []*domain.Car, <-chan []RaceResult) {
 	resultCh := make(chan []RaceResult, 1)
 
 	var wg sync.WaitGroup
+	var mu sync.Mutex
 	results := make([]RaceResult, 0)
 	startTime := time.Now()
 
@@ -42,19 +43,22 @@ func (r *Race) Start() (<-chan []*domain.Car, <-chan []RaceResult) {
 				if rand.Intn(10) >= 4 {
 					c.Distance++
 				}
-				// 각 상태를 브로드캐스트용 임시 복사로 전송
+				// 상태를 브로드캐스트
 				snapshot := make([]*domain.Car, len(r.Cars))
 				copy(snapshot, r.Cars)
 				updateCh <- snapshot
+
 				time.Sleep(100 * time.Millisecond)
 			}
 
 			// 완주 시 기록 저장
+			mu.Lock()
 			results = append(results, RaceResult{
 				Name:     c.Name,
 				Distance: c.Distance,
 				Finish:   time.Since(startTime),
 			})
+			mu.Unlock()
 		}(car)
 	}
 
