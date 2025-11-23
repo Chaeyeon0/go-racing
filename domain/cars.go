@@ -6,6 +6,12 @@ type Cars struct {
 	List []*Car
 }
 
+type MoveResult struct {
+	Name      string
+	Distance  int
+	MovedThis bool
+}
+
 func NewCars(names []string) (*Cars, error) {
 	cars := make([]*Car, 0)
 	for _, name := range names {
@@ -18,10 +24,18 @@ func NewCars(names []string) (*Cars, error) {
 	return &Cars{List: cars}, nil
 }
 
-func (c *Cars) MoveAll(strategy MovementStrategy) {
-	for _, car := range c.List {
+func (c *Cars) MoveAll(strategy MovementStrategy) []MoveResult {
+	results := make([]MoveResult, len(c.List))
+	for i, car := range c.List {
+		before := car.Distance
 		car.Move(strategy)
+		results[i] = MoveResult{
+			Name:      car.Name,
+			Distance:  car.Distance,
+			MovedThis: car.Distance > before,
+		}
 	}
+	return results
 }
 
 func (c *Cars) PrintStatus() {

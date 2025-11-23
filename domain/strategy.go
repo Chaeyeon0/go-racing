@@ -7,8 +7,14 @@ type MovementStrategy interface {
 	Movable() bool
 }
 
-// 랜덤 전략
-type RandomMovementStrategy struct{}
+type RandomMovementStrategy struct {
+	r *rand.Rand
+}
+
+func NewRandomMovementStrategy(seed int64) RandomMovementStrategy {
+	source := rand.NewSource(seed)
+	return RandomMovementStrategy{r: rand.New(source)}
+}
 
 func (r RandomMovementStrategy) Movable() bool {
 	return rand.Intn(10) >= 4
